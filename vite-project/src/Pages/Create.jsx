@@ -272,14 +272,14 @@ export default function CreateRoleForm() {
             <div className="flex gap-3">
               <button
                 type="submit"
-                className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300"
+                className="flex-1 bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition duration-300 cursor-pointer"
               >
                 {editingWorker ? "Update Role" : "Create Role"}
               </button>
               <button
                 type="button"
                 onClick={handleCancelEdit}
-                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300"
+                className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600 transition duration-300 cursor-pointer"
               >
                 Cancel
               </button>
