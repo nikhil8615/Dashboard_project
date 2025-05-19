@@ -72,6 +72,37 @@ const genderData = [
 ];
 const COLORS = ["#0088FE", "#00C49F", "#FFBB28"];
 const DashboardStats = () => {
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          console.error("No authentication token found");
+          return;
+        }
+
+        const response = await fetch("http://localhost:4000/api/user/current", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          setUserId(data.user.UserID);
+        } else {
+          console.error("Failed to fetch user data:", data.message);
+        }
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
+
   const stats = [
     {
       title: "Total User",
@@ -99,8 +130,15 @@ const DashboardStats = () => {
 
   return (
     <>
-      <div className="min-h-screen ">
-        <p className="text-orange-600 text-5xl font-bold mb-10">Dashboard</p>
+      <div className="min-h-screen">
+        <div className="flex justify-between items-center mb-10">
+          <p className="text-orange-600 text-5xl font-bold">Dashboard</p>
+          {userId && (
+            <p className="text-gray-600 text-xl">
+              Welcome, <span className="font-semibold">{userId}</span>
+            </p>
+          )}
+        </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4">
           {stats.map((stat, index) => (
             <div

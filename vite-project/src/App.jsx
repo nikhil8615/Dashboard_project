@@ -6,6 +6,8 @@ import Login from "./Components/Login";
 import Sidebar from "./Components/Sidebar";
 import DashboardStats from "./Pages/Dashboard";
 import Create from "./Pages/Create";
+import UserSubmissions from "./Components/UserSubmissions";
+import ContactForm from "./Components/ContactForm";
 
 const PlaceholderPage = ({ title }) => (
   <div className="p-6">
@@ -59,6 +61,8 @@ const App = () => {
               element={<PlaceholderPage title="Responsive Tables" />}
             />
             <Route path="/forms" element={<PlaceholderPage title="Forms" />} />
+            {/* <Route path="/forms" element={<ContactForm />} /> */}
+            <Route path="/users" element={<UserSubmissions />} />
             <Route
               path="/dropdown"
               element={<PlaceholderPage title="Multi-Level Dropdown" />}

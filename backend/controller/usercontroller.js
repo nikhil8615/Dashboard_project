@@ -1,4 +1,3 @@
-// import userModel from "../models/userModel.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -26,7 +25,7 @@ const superAdminLogin = async (req, res) => {
     const adminPassword = process.env.ADMIN_PASSWORD || "qwerty12345";
 
     if (userID === adminEmail && password === adminPassword) {
-      const jwtSecret = process.env.JWT_SECRET || "your_jwt_secret_key";
+      const jwtSecret = process.env.JWT_SECRET || "jwt_secret_key";
       const token = jwt.sign(userID + password, jwtSecret);
       res.json({ success: true, token });
     } else {
@@ -190,6 +189,56 @@ const deleteRole = async (req, res) => {
   }
 };
 
+const getCurrentUser = async (req, res) => {
+  try {
+    const token = req.header("Authorization")?.replace("Bearer ", "");
+
+    if (!token) {
+      return res.json({
+        success: false,
+        message: "No authentication token provided",
+      });
+    }
+
+    try {
+      const decoded = jwt.verify(
+        token,
+        process.env.JWT_SECRET || "your_jwt_secret_key"
+      );
+      const db = await getDbConnection();
+
+      const [rows] = await db.execute(
+        "SELECT * FROM worker WHERE Worker_id = ?",
+        [decoded.userId]
+      );
+      await db.end();
+
+      if (rows.length === 0) {
+        return res.json({
+          success: false,
+          message: "User not found",
+        });
+      }
+
+      res.json({
+        success: true,
+        user: rows[0],
+      });
+    } catch (jwtError) {
+      return res.json({
+        success: false,
+        message: "Invalid authentication token",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 const loginUser = async (req, res) => {
   try {
     const { userID, password, role } = req.body;
@@ -253,4 +302,5 @@ export {
   createRole,
   updateRole,
   deleteRole,
+  getCurrentUser,
 };

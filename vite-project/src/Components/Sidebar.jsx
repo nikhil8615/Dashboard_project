@@ -50,18 +50,18 @@ const Sidebar = () => {
             {({ isActive }) => (
               <SidebarItem
                 icon={<BarChart2 size={18} />}
-                label="Create Roles"
+                label="Roles"
                 isActive={isActive}
               />
             )}
           </NavLink>
         )}
 
-        <NavLink to="/tables" className="block">
+        <NavLink to="/users" className="block">
           {({ isActive }) => (
             <SidebarItem
               icon={<Table size={18} />}
-              label="Responsive Tables"
+              label="Users"
               isActive={isActive}
             />
           )}

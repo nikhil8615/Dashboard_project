@@ -2,6 +2,7 @@ import express from "express";
 import "dotenv/config";
 import cors from "cors";
 import userRouter from "./routes/userRoute.js";
+import formRouter from "./routes/formRoute.js";
 import mysql from "mysql2/promise";
 
 //connect to mysql
@@ -31,6 +32,17 @@ await db.execute(`CREATE TABLE IF NOT EXISTS worker_roles(
   role_name VARCHAR(100) NOT NULL UNIQUE
 )`);
 console.log("worker_roles table created or already exists");
+
+// Create user_submissions table if it doesn't exist
+await db.execute(`CREATE TABLE IF NOT EXISTS user_submissions(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(100) NOT NULL,
+  phone VARCHAR(20),
+  message TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)`);
+console.log("user_submissions table created or already exists");
 
 // Insert default roles if they don't exist
 // await db.execute(`
@@ -73,8 +85,11 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api/user", userRouter);
+app.use("/api/forms", formRouter);
 
 app.get("/", (req, res) => {
   res.send("Hey");
 });
-app.listen(port, () => console.log("Server Started on PORT: " + port));
+app.listen(port, "0.0.0.0", () =>
+  console.log("Server Started on PORT: " + port)
+);

@@ -7,6 +7,7 @@ import {
   createRole,
   updateRole,
   deleteRole,
+  getCurrentUser,
 } from "../controller/usercontroller.js";
 
 const userRouter = express.Router();
@@ -17,4 +18,5 @@ userRouter.get("/workers", getWorkers);
 userRouter.post("/roles", createRole);
 userRouter.put("/roles/:id", updateRole);
 userRouter.delete("/roles/:id", deleteRole);
+userRouter.get("/current", getCurrentUser);
 export default userRouter;
